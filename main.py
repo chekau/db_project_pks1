@@ -139,3 +139,78 @@ class TracksTable(Table):
         DateBase.cursor().execute(query, (name,))
         DateBase.commit()
 
+class Program:
+    __is_finished: bool = False
+    __current_table: Table
+
+    @classmethod
+    def __handle_table_choice(cls):
+        print("1: Работать с таблицей Listeners")
+        print("2: Работать с таблицей Tracks")
+
+        choice = int(input(">> "))
+        if choice == 1:
+            cls.__current_table = ListenersTable
+        elif choice == 2:
+            cls.__current_table = TracksTable
+
+    @classmethod
+    def __handle_choice(cls):
+        print(f"1: Добавить запись")
+        print(f"2: Найти запись")
+        print(f"3: Удалить запись")
+
+        choice = int(input(">> "))
+        if choice == 1:
+            field_names = cls.__current_table.get_fields_name()
+            values = dict()
+
+            for field_name in field_names:
+                values[field_name] = str(input(f"{field_name}: "))
+
+
+            cls.__current_table.add(values)
+            print("Запись успешно добавлена!")
+
+        elif choice == 2:
+            field_names = cls.__current_table.get_fields_name()
+            values = dict()
+
+            for field_name in field_names:
+                data = str(input(f"Значение для {field_name}: "))
+                if data != "":
+                    values[field_name] = data
+            asc = input("Чтобы выбрать сортировку по возрастанию,напишите ASC ,для сорировки по убыванию напишите DESC:")
+            sort_name = input("Напишите столбец который хотите сортировать:")
+            values["sort"] = (sort_name,asc)
+
+
+            print("Поиск выдал данные результаты")
+            for strings in cls.__current_table.find(values):
+                for string in strings:
+                    print(string)
+            #print(cls.__current_table.find(values))
+
+        elif choice == 3:
+            field_names = cls.__current_table.get_fields_name()
+            values = dict()
+
+            for field_name in field_names:
+                values[field_name] = input(f"Значение для {field_name}: ")
+            cls.__current_table.delete(values)
+            print("Запись успешно удалена!")
+
+        elif choice == 6:
+            cls.__is_finished = True
+
+    @classmethod
+    def main(cls):
+        DateBase.connect()
+        while (not cls.__is_finished):
+            cls.__handle_table_choice()
+            cls.__handle_choice()
+
+
+
+
+Program.main()
