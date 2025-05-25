@@ -26,3 +26,16 @@ class DateBase:
         cls.__connection.commit()
 
 
+class Table(ABC):
+    @staticmethod
+    def add(values: dict):
+        pass
+    @staticmethod
+    def get_fields_name():
+        pass
+    @staticmethod
+    def find(values: dict):
+        pass
+    @staticmethod
+    def delete(values: dict):
+        pass
