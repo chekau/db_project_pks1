@@ -1,5 +1,4 @@
-markdown
-Copy code
+
 # 📦 DB Project PKS1
 
 Это учебный консольный проект на Python с работой с базами данных 📚.  
